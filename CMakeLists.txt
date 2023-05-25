@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.2)
 
 project(hl_server C CXX)
 
-SET (EXAMPLE_BINARY "hl_mai_lab_01")
+SET (EXAMPLE_BINARY "hl_mai_lab_02")
 SET (POST_SERVICE "post_service")
 SET (DELIVERY_SERVICE "delivery_service")
 
