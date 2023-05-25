@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.2)
 project(hl_server C CXX)
 
 SET (EXAMPLE_BINARY "hl_mai_lab_01")
-SET (OTHER_SERVICE "other_service")
 SET (POST_SERVICE "post_service")
 SET (DELIVERY_SERVICE "delivery_service")
 
@@ -44,22 +43,6 @@ target_link_libraries(${EXAMPLE_BINARY} PRIVATE
                              "mysqlclient"
                              ZLIB::ZLIB)
 
-                             
-add_executable(${OTHER_SERVICE} other_main.cpp)
-target_include_directories(${OTHER_SERVICE} PRIVATE "${CMAKE_BINARY_DIR}")
-target_compile_options(${OTHER_SERVICE} PRIVATE -Wall -Wextra -pedantic -Werror )
-set_target_properties(${OTHER_SERVICE} PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(${OTHER_SERVICE} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
-
-target_link_libraries(${OTHER_SERVICE} PRIVATE 
-                             ${CMAKE_THREAD_LIBS_INIT} 
-                             ${Poco_LIBRARIES}
-                             "PocoData"
-                             "PocoDataMySQL"
-                             "mysqlclient"
-                             ZLIB::ZLIB)
-
-################ POST
 add_executable(${POST_SERVICE} post_main.cpp 
                                  config/config.cpp 
                                  database/database.cpp
@@ -79,7 +62,6 @@ target_link_libraries(${POST_SERVICE} PRIVATE
                              "mysqlclient"
                              ZLIB::ZLIB)
 
-################ DELIVERY
 add_executable(${DELIVERY_SERVICE} delivery_main.cpp 
                                  config/config.cpp 
                                  database/database.cpp
