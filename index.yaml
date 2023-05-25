@@ -5,7 +5,7 @@ info:
   description: Пример API для первого домашнего задания по курсу Архитектура программных систем
 servers:
   - url: http://localhost:8080
-    description: Sample server
+    description: Example server
 paths:
   /search:
     get:
@@ -145,110 +145,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /message:
-    get:
-      summary: Read a messages
-      parameters:
-      - name: id_from
-        description: Уникальный идентификатор автора отправителя сообщений
-        in: query
-        required: true
-        schema:
-          $ref: '#/components/schemas/user_id'
-      - name: id_to
-        description: Уникальный идентификатор автора получателя сообщений
-        in: query
-        required: true
-        schema:
-          $ref: '#/components/schemas/user_id'
-      responses:
-        '200':
-          description: Сообщения между авторами
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messages'
-        404:
-          description: No author found for the provided `id`
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messages'
-        500:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-    post:
-      summary: Send message
-      parameters:
-      - name: id_from
-        description: id автора - отправителя сообщения
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: id_to
-        description: id автора - получателя сообщения
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: message
-        description: сообщение
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '200':
-          description: Идентификатор, добавленного сообщения
-          content:
-            application/json:
-              schema:
-                type: integer
-        404:
-          description: No author found for the provided `id`
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        500:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /contacts:
-    get:
-      summary: Read a messages
-      parameters:
-      - name: contact_id
-        description: Уникальный идентификатор автора для которого ищем контакты
-        in: query
-        required: true
-        schema:
-          $ref: '#/components/schemas/user_id'
-      responses:
-        '200':
-          description: Контакты автора
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/contacts'
-        404:
-          description: No author found for the provided `id`
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/messages'
-        500:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'              
 components:
   schemas:
     user_id:
@@ -283,36 +179,17 @@ components:
           type: string
         password:
           type: string
-    contacts:
-      type: array
-      items:
-        $ref: '#/components/schemas/contact'
-    contact:
-      type: object
-      properties:
-        id:
-          type: string
-    messages:
-      type: array
-      items:
-        $ref: '#/components/schemas/message'
-    message:
-      type: object
-      properties:
-        id:
-          type: string
-        id_from:
-          type: string
-        id_to:
-          type: string
-        message:
-          type: string
-    
     Error:
       type: object
       required:
         - message
       properties:
         message:
-          description: A human readable error message
+          description: Сообщение о ошибке
           type: string
+  securitySchemes:
+      basicAuth:     
+        type: http
+        scheme: basic
+security:
+  - basicAuth: []

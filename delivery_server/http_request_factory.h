@@ -1,5 +1,5 @@
-#ifndef WEBPAGEHANDLER_H
-#define WEBPAGEHANDLER_H
+#ifndef HTTPREQUESTFACTORY_H
+#define HTTPREQUESTFACTORY_H
 
 #include "Poco/Net/HTTPServer.h"
 #include "Poco/Net/HTTPRequestHandler.h"
@@ -19,8 +19,6 @@
 #include "Poco/Util/OptionSet.h"
 #include "Poco/Util/HelpFormatter.h"
 #include <iostream>
-#include <iostream>
-#include <fstream>
 
 using Poco::Net::ServerSocket;
 using Poco::Net::HTTPRequestHandler;
@@ -40,43 +38,31 @@ using Poco::Util::OptionSet;
 using Poco::Util::OptionCallback;
 using Poco::Util::HelpFormatter;
 
-class WebPageHandler: public HTTPRequestHandler
+#include "handlers/delivery_handler.h"
+
+class HTTPRequestFactory: public HTTPRequestHandlerFactory
 {
 public:
-    WebPageHandler(const std::string& format): _format(format)
+    HTTPRequestFactory(const std::string& format):
+        _format(format)
     {
     }
 
-    void handleRequest(HTTPServerRequest& request,
-                       HTTPServerResponse& response)
+    HTTPRequestHandler* createRequestHandler(
+        const HTTPServerRequest& request)
     {
-       // Application& app = Application::instance();
-       // app.logger().information("HTML Request from "    + request.clientAddress().toString());
-
-        response.setChunkedTransferEncoding(true);
-        response.setContentType("text/html");
-
-        std::ostream& ostr = response.send();
-
-        std::ifstream file;
-
-        auto pos = request.getURI().find('?');
-        std::string uri = request.getURI();
-        if(pos!=std::string::npos) uri = uri.substr(0,pos);
-        std::string name="content"+uri;
-        file.open(name, std::ifstream::binary);
-
-        if (file.is_open())
-            while (file.good()){
-                int sign = file.get();
-                if(sign>0)
-                ostr <<  (char)sign;
-            }
-
-        file.close();
+        std::cout << "request:" << request.getURI()<< std::endl;
+        if (hasSubstr(request.getURI(),"/search_login_in") ||
+            hasSubstr(request.getURI(), "/search_login_out") ||
+            hasSubstr(request.getURI(), "/change_status") ||
+            hasSubstr(request.getURI(), "/create_new_delivery")) 
+            return new DeliveryHandler(_format);
+            
+        return 0;
     }
 
 private:
     std::string _format;
 };
-#endif // !WEBPAGEHANDLER_H
+
+#endif
