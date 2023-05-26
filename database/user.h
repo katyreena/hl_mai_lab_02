@@ -11,7 +11,6 @@ namespace database
     class User{
         private:
             long _id;
-            long _my_id;
             std::string _first_name;
             std::string _last_name;
             std::string _email;
@@ -24,7 +23,6 @@ namespace database
             static User fromJSON(const std::string & str);
 
             long             get_id() const;
-            long             get_my_id() const;
             const std::string &get_first_name() const;
             const std::string &get_last_name() const;
             const std::string &get_email() const;
@@ -33,7 +31,6 @@ namespace database
             const std::string &get_password() const;
 
             long&        id();
-            long&        my_id();
             std::string &first_name();
             std::string &last_name();
             std::string &email();
@@ -47,7 +44,6 @@ namespace database
             static std::vector<User> read_all();
             static std::vector<User> search(std::string first_name,std::string last_name);
             void save_to_mysql();
-            long get_len_database();
 
             Poco::JSON::Object::Ptr toJSON() const;
 
